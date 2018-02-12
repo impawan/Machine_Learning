@@ -12,7 +12,35 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-path = 'D:\\Users\\paprasad\\python\\Source\\LRSRC.txt'
+
+
+
+
+def computeCost(X, y, theta):  
+    inner = np.power(((X * theta.T) - y), 2)     
+    return np.sum(inner) / (2 * len(X))
+
+
+
+
+def gradinetDecsent(X,y,theta,apha,iters):
+    temp=np.matrix(np.zeros(theta.shape))
+    paremeters = int(theta.ravel().shape[1])
+    print (parameters)
+    cost=np.zeros(iters)
+    print (temp)
+    for i in range(iters):
+        error = (X*theta.T)-y
+        for j in range(paremeters):
+            term = np.multiply(error, X[:,j])
+            temp[0,j] = theta[0,j] - ((alpha / len(X)) * np.sum(term))
+            theta = temp
+            cost[i] = computeCost(X, y, theta)
+    return theta, cost  
+
+
+
+path = 'D:\Machine Learning\src\Population_profit.txt'
 
 
 data = pd.read_csv(path, header=None, names=['Population', 'Profit'])
@@ -48,6 +76,8 @@ iters = 1000
 # perform gradient descent to "fit" the model parameters
 g, cost = gradientDescent(X, y, theta, alpha, iters)  
 
+ 
+
 
 print (g)
 final_cost = computeCost(X,y,g)
@@ -77,26 +107,6 @@ ax.set_ylabel('Cost')
 ax.set_title('Error vs. Training Epoch')  
 
 
-def computeCost(X, y, theta):  
-    inner = np.power(((X * theta.T) - y), 2)     
-    return np.sum(inner) / (2 * len(X))
-
-
-
-
-def gradinetDecsent(X,y,theta,iters):
-    temp=np.matrix(np.zeros(theta.shape))
-    paremeters = int(theta.ravel().shape[1])
-    cost=np.zeros(iters)
-    print (temp)
-    for i in range(iters):
-        error = (X*theta.T)-y
-        for j in range(paremeters):
-            term = np.multiply(error, X[:,j])
-            temp[0,j] = theta[0,j] - ((alpha / len(X)) * np.sum(term))
-            theta = temp
-            cost[i] = computeCost(X, y, theta)
-        return theta, cost   
         
     
     
