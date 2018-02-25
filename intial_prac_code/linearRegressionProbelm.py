@@ -8,6 +8,8 @@ Created on Fri Feb  9 23:29:50 2018
 import numpy as np
 import pandas as pd
 
+from sklearn  import preprocessing
+
 #setting path varaible for source file 
 path ='D:\Machine Learning\src\HeightWeightAgeGender.txt'
 
@@ -15,16 +17,21 @@ np.seterr(divide='ignore')
 
 #creating dataframe from source file using pandas lib
 data = pd.read_csv(path,sep=';',skiprows=1,names=['Height','Weight','Age','Male'])
-
-
 zipped = list(zip(data.Height,data.Male,data.Age,data.Weight))
 modidata = pd.DataFrame(zipped)
 
+scalar = preprocessing.MinMaxScaler()
+#
+#modidata = scalar.fit_transform(tempdf)
+#modidata = pd.DataFrame(modidata)
+
+
+print(type (modidata))
 #print (modidata)
 
 #ax = modidata.plot(kind='scatter',x=0,y=1,figsize=(12,8))
-alpha = 0.0001
-iteration = 10000
+alpha = 0.001
+iteration = 1000
 
 
 def isnan(num):
@@ -54,12 +61,15 @@ def GradeintDes (X,Y,Theta):
          
 
 def LinearRegression(df) :
-    df.insert(0,'Ones',1)
+    #df.insert(0,'Ones',1)
     col = df.shape[1];
     x=df.iloc[:,0:col-1]
     y=df.iloc[:,col-1:col]
     X= np.matrix(x.values)
     Y= np.matrix(y.values)
+    X=scalar.fit_transform(X)
+    X.insert(0,'ones',1)
+    print (X)
     Theta = np.matrix(np.zeros(X.shape[1]))
     print(Theta.shape)
     print (X.shape)
